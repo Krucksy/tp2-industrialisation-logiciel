@@ -1,5 +1,9 @@
 FROM python:3.9
 
+RUN net user /add nonroot
+
+USER nonroot
+
 WORKDIR /code
 
 COPY ./setup.py /code/setup.py
