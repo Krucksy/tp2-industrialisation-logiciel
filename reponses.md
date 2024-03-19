@@ -18,3 +18,6 @@
 
 C'est utilisé pour définir les variables d'environnement.
 
+
+# Exercice 2
+
