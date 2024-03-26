@@ -61,7 +61,7 @@ Oui, il y'en a 1 dans le DockerFile:
 Pour corriger ce problème, il faut créer un utilisateur non-root et l'utiliser pour lancer l'application.
 
 ```Dockerfile
-RUN net user /add nonroot
+RUN adduser --system --no-create-home nonroot
 
 USER nonroot
 ```
