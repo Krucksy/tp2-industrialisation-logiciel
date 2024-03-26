@@ -59,9 +59,53 @@ Oui, il y'en a 1 dans le DockerFile:
 - The python image runs with root as the default user. Make sure it is safe here.
 
 Pour corriger ce problème, il faut créer un utilisateur non-root et l'utiliser pour lancer l'application.
+Attention de le créer après le `pip install` pour ne pas avoir de problèmes de permissions.
 
 ```Dockerfile
 RUN adduser --system --no-create-home nonroot
 
 USER nonroot
 ```
+
+
+# Exercice 3
+
+## a)
+
+**Que fait le job pytest ?**
+Il récupère une image python, il y installe virtualenv, créer un nouvel environnement virtuel, installe les dépendances (requirements.txt) et lance les tests.
+
+**Que fait le job image-creation ?**
+Il va créer une image kaniko, une alternative à Docker.
+
+**Que fait le job package-creation ?**
+Il va créer un package python à partir du code source.
+
+**Dans quel ordre les différents jobs s’executent-ils et pourquoi ?**
+D'abord pytest, ensuite image-creation et enfin package-creation.
+Car c'est l'ordre des 'stages' dans le fichier yaml.
+
+**Le stage 2 génère une image Docker. Où est-elle stockée et comment pouvez-vous la retrouver ?**
+Elle est disponible dans l'onglet `Container Registry` du projet.
+
+**Le stage 3 génère un wheel Python. Où est-il stocké et comment pouvez-vous le retrouver ?**
+Elle est publié sur la forge GitLab. Elle est disponible dans l'onglet `Package Registry` du projet.
+Il est stocké dans un artifact du job package-creation. Précisément dans le dossier /dist.
+
+## b)
+
+Commande pour installer le package TP2 depuis le dépôt GitLab:
+
+```bash
+pip install TP2 --index-url https://__token__:<personal_token>@gitlab-etu.ing.he-arc.ch/api/v4/projects/3537/packages/pypi/simple
+```
+
+Attention, pour créer le token, il faut aller dans `Settings` -> `Access Tokens` -> `Create personal access token` et cocher `read_registry`. Et le role maintainer.
+
+## c)
+
+**A quel moment de la pipeline ce job s’execute-t-il et pourquoi ?**
+A la fin, car il fait partie du stage `test-package` qui est en dernier dans la liste. 
+
+**Que fait le job wheel-testing ?**
+A partir de l'image python, il créer un environnement virtuel, installe le package TP2 et test si ce dernier fonctionne correctement.
