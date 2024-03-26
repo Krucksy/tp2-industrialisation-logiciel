@@ -48,6 +48,8 @@ Oui, il y'en a 3.
 - Update this function so that its implementation is not identical to spend_cash on line 20.
 - Remove the unused function parameter "deferred".
 
+Pour corriger ce problème, il faut supprimer les paramètres inutiles.
+
 **Y a-t-il des Security Hotspots ? Si oui, combien et pour quelle(s) raison(s) ?**
 
 Oui, il y'en a 1 dans le DockerFile:
@@ -55,3 +57,11 @@ Oui, il y'en a 1 dans le DockerFile:
 `FROM python:3.9`
 
 - The python image runs with root as the default user. Make sure it is safe here.
+
+Pour corriger ce problème, il faut créer un utilisateur non-root et l'utiliser pour lancer l'application.
+
+```Dockerfile
+RUN net user /add nonroot
+
+USER nonroot
+```

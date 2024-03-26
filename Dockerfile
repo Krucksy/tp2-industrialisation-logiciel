@@ -1,6 +1,6 @@
 FROM python:3.9
 
-RUN net user /add nonroot
+RUN adduser --system --no-create-home nonroot
 
 USER nonroot
 
